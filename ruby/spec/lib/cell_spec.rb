@@ -41,4 +41,29 @@ describe Cell do
     its(:possible_values){should == [3]}
     its(:value){should == 3 }
   end
+
+  context "disable all" do
+    before :each do
+      subject.disable 1
+      subject.disable 2
+      subject.disable 3
+      subject.disable 4
+      subject.disable 5
+      subject.disable 6
+    end
+
+    its(:solved){should == false}
+    its(:possible_values){should == []}
+    its(:value){should == :impossible }
+  end
+
+  context "set known value" do
+    before :each do
+      subject.value = 3
+    end
+
+    its(:solved){should == true}
+    its(:possible_values){should == [3]}
+    its(:value){should == 3 }
+  end
 end
