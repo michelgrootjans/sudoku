@@ -5,11 +5,12 @@ class Cell
   end
 
   def value
+    return @possible_values.first if solved
     :unknown
   end
 
   def solved
-    false
+    @possible_values.size == 1
   end
 
   def disable value
