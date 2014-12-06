@@ -10,12 +10,12 @@ class Cell
   end
 
   def value
-    return @possible_values.first if solved
+    return @possible_values.first if solved?
     return :impossible if impossible
     :unknown
   end
 
-  def solved
+  def solved?
     @possible_values.size == 1
   end
 

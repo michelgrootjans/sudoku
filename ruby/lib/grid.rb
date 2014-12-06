@@ -8,33 +8,54 @@ class Grid
 
     (0..2).each do |row|
       @cells[row] = []
-      (0..1).each do
+      (0..1).each do |column|
         @cells[row] << Cell.new
       end
     end
   end
 
-  def solved
-    false
+  def west_channel event
+    (1..2).each do |column|
+      disable(get_cell(event[:row], column), event[:value])
+    end
+  end
+  alias :east_channel :west_channel
+
+  def south_channel event
+    (1..3).each do |row|
+      disable(get_cell(row, event[:column]), event[:value])
+    end
+  end
+  alias :north_channel :south_channel
+
+  def solved?
+    cells.all?(&:solved?)
   end
 
   def set_value row, column, value
-    cells.each do |cell|
-      cell.disable value
-    end
-    cell(row, column).value = value
+    cells.each { |cell| cell.disable value }
+    get_cell(row, column).value = value
   end
 
   def value_of row, column
-    cell(row, column).value
+    get_cell(row, column).value
   end
 
   def possible_values_of row, column
-    cell(row, column).possible_values
+    get_cell(row, column).possible_values
   end
 
 private
-  def cell row, column
+  def disable cell, value
+    return if cell.solved?
+
+    cell.disable(value)
+    return unless cell.solved?
+
+    cells.each { |c| disable c, cell.value }
+  end
+
+  def get_cell row, column
     @cells[row - 1][column - 1]
   end
 
